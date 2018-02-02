@@ -109,7 +109,7 @@ app.intent("SelectCrust", {
         "slots": { "CRUST": "LITERAL" },
         "utterances": [
             "{crust|CRUST}",
-            "{crust|CRUST} please",
+            "{crust|CRUST} {crust|please|crust please}",
             "{I'd like|I would like|I would love|How about|let's have|let's try|can I have} a {crust|CRUST} crust",
             "{I'd like|I would like|I would love|How about|let's have|let's try|can I have} a {crust|CRUST} crust please"
         ]
@@ -307,58 +307,84 @@ app.intent("AvailableOptions", {
     }
 );
 
+app.intent("FinishPizza", {
+        "utterances": [
+            "I'm {finished|done}",
+            "order {the pizza|it}",
+            "{no more|finish|done|complete|finished|purchase|buy|eat}",
+            "{that's|that is} {enough|good|all}"
+        ]
+    },
+    function(request, response) {
+        var speech = getDescription(session);
+        response
+            .say(speech
+                .pause("250ms")
+                .say("I've ordered the pizza. If this had been a real app you would soon be tasting the heavenly bliss of your custom made pizza.")
+                .ssml())
+            .shouldEndSession(false);
+    }
+);
+
+
 app.intent("DescribePizza", {
         "utterances": [
             "{describe|tell me about|what's on|what is on|repeat back} {the|my} pizza"
         ]
     },
     function(request, response) {
-        var session = request.getSession();
-
-        var speech = new AmazonSpeech()
-            .say("You currently have");
-
-        var crust = session.get("crust");
-        var sauce = session.get("sauce");
-        var cheese = session.get("cheese");
-        if (crust) {
-            speech.say(" a " + crust + " crust,");
-        } else {
-            speech.say("no crust,");
-        }
-        if (sauce) {
-            speech.say(sauce + " sauce,");
-        } else {
-            speech.say("no sauce,");
-        }
-        if (cheese) {
-            speech.say(" and piles of " + cheese + " cheese.");
-        } else {
-            speech.say(" and no cheese.");
-        }
-        speech.pause("200ms");
-        var toppings = session.get("toppings");
-        if (toppings) {
-            switch(toppings.length) {
-                case 0:
-                    speech.say("You have no other toppings.");
-                    break;
-                case 1:
-                    speech.say("For toppings you have only " + toppings[0]);
-                    break;
-                default:
-                    speech.say("For toppings you have ");
-                    for (var i = 1; i < toppings.length; i++) {
-                        speech.say(toppings[i] + ", ");
-                    }
-                    speech.say(" and " + toppings[0]);
-                    break;
-            }
-        }
-
-        response.say(speech.ssml()).shouldEndSession(false);
+        var speech = getDescription(session);
+        response
+            .say(speech.ssml())
+            .shouldEndSession(false);
     }
 );
+
+function getDescription(session) {
+    var session = request.getSession();
+
+    var speech = new AmazonSpeech()
+        .say("You currently have");
+
+    var crust = session.get("crust");
+    var sauce = session.get("sauce");
+    var cheese = session.get("cheese");
+    if (crust) {
+        speech.say(" a " + crust + " crust,");
+    } else {
+        speech.say("no crust,");
+    }
+    if (sauce) {
+        speech.say(sauce + " sauce,");
+    } else {
+        speech.say("no sauce,");
+    }
+    if (cheese) {
+        speech.say(" and piles of " + cheese + " cheese.");
+    } else {
+        speech.say(" and no cheese.");
+    }
+    speech.pause("200ms");
+    var toppings = session.get("toppings");
+    if (toppings) {
+        switch(toppings.length) {
+            case 0:
+                speech.say("You have no other toppings.");
+                break;
+            case 1:
+                speech.say("For toppings you have only " + toppings[0]);
+                break;
+            default:
+                speech.say("For toppings you have ");
+                for (var i = 1; i < toppings.length; i++) {
+                    speech.say(toppings[i] + ", ");
+                }
+                speech.say(" and " + toppings[0]);
+                break;
+        }
+    }
+    return speech;
+}
 
 function getNextSaying(session) {
     if (!session.get("crust")) {
