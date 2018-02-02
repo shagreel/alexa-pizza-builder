@@ -1,0 +1,17 @@
+{
+  "name": "pizza_app",
+  "version": "1.0.0",
+  "description": "Create a pizza order using alexa",
+  "author": "Paul Jones <pajones@adobe.com>",
+  "license": "MIT",
+  "main": "pizza.js",
+  "scripts": {
+    "start": "node pizza.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.1",
+    "alexa-app": "^4.2.0",
+    "ssml-builder": "^0.4.2"
+  }
+}
