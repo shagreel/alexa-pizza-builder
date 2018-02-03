@@ -23,17 +23,18 @@ app.pre = function(request, response, type) {
         console.log("*********** Request ***********");
         console.log(request.data.request.intent.name);
         console.log("  -- ", request.data.request.intent.slots);
-        console.log("\n");
     }
 };
 
 app.post = function(request, response, type) {
     console.log("*********** Session ***********");
-    console.log("Crust - %s", request.getSession().get("crust"));
-    console.log("Sauce - %s", request.getSession().get("sauce"));
-    console.log("Cheese - %s", request.getSession().get("cheese"));
-    console.log("Toppings - %s", request.getSession().get("toppings"));
-    console.log("\n");
+    if (request.getSession()) {
+        console.log("Crust - %s", request.getSession().get("crust"));
+        console.log("Sauce - %s", request.getSession().get("sauce"));
+        console.log("Cheese - %s", request.getSession().get("cheese"));
+        console.log("Toppings - %s", request.getSession().get("toppings"));
+        console.log("\n");
+    }
 };
 
 app.launch(function(request, response) {
@@ -51,11 +52,13 @@ app.intent("AMAZON.HelpIntent", {
         "utterances": []
     },
     function(request, response) {
-        var helpOutput = "You can say 'make me a pizza.' or ask 'what kind of crust can I have on my pizza?'." +
-            " You can also say stop or exit to quit.";
-        var reprompt = "What would you like to do?";
+        var session = request.getSession();
+
+        var helpOutput = "You can ask 'what are my options' or 'what kind of crust can I have on my pizza?'." +
+            " You can also say stop or cancel to quit. ";
+        var reprompt = getNextSaying(session);
         // AMAZON.HelpIntent must leave session open -> .shouldEndSession(false)
-        response.say(helpOutput).reprompt(reprompt).shouldEndSession(false);
+        response.say(helpOutput+reprompt).reprompt(reprompt).shouldEndSession(false);
     }
 );
 
@@ -81,7 +84,7 @@ app.dictionary = {
     "crust": ["traditional","thin","thick","deep dish","focaccia","herb","stuffed"],
     "sauce": ["Marinara","Pesto","Barbecue","Hummus","Bechamel","Alfredo"],
     "cheese": ["Mozzarella","Cheddar","Colby","Provolone","Parmesan","Ricotta","Gruyere","Goat"],
-    "toppings": ["Bell Pepper","Mushroom","Onion","Olive","Spinach","Artichoke","Tomato","Sun-dried Tomato","Pineapile","Basil", "Pepperoni","Sausage","Bacon","Ham","Chicken","Pastrami"]
+    "toppings": ["Bell Pepper","Mushroom","Onion","Olive","Spinach","Artichoke","Tomato","Sun-dried Tomato","Pineapple","Basil", "Pepperoni","Sausage","Bacon","Ham","Chicken","Pastrami"]
 };
 
 app.intent("MakePizza", {
@@ -110,8 +113,10 @@ app.intent("SelectCrust", {
         "utterances": [
             "{crust|CRUST}",
             "{crust|CRUST} {crust|please|crust please}",
-            "{I'd like|I would like|I would love|How about|let's have|let's try|can I have} a {crust|CRUST} crust",
-            "{I'd like|I would like|I would love|How about|let's have|let's try|can I have} a {crust|CRUST} crust please"
+            "{I'd like|I would like|I would love|How about|let's have|let's try|can I have|may I have} {crust|CRUST} crust",
+            "{I'd like|I would like|I would love|How about|let's have|let's try|can I have|may I have} {crust|CRUST} crust please",
+            "{I'd like|I would like|I would love|How about|let's have|let's try|can I have|may I have} a {crust|CRUST} crust",
+            "{I'd like|I would like|I would love|How about|let's have|let's try|can I have|may I have} a {crust|CRUST} crust please"
         ]
     },
     function(request, response) {
@@ -145,8 +150,8 @@ app.intent("SelectSauce", {
         "slots": { "SAUCE": "LITERAL" },
         "utterances": [
             "{sauce|SAUCE}",
-            "{I'd like|I would like|I would love|How about|let's have|let's try} {sauce|SAUCE}",
-            "{I'd like|I would like|I would love|How about|let's have|let's try} {sauce|SAUCE} sauce"
+            "{I'd like|I would like|I would love|How about|let's have|let's try|can I have|may I have} {sauce|SAUCE}",
+            "{I'd like|I would like|I would love|How about|let's have|let's try|can I have|may I have} {sauce|SAUCE} sauce"
         ]
     },
     function(request, response) {
@@ -180,7 +185,8 @@ app.intent("SelectCheese", {
         "slots": { "CHEESE": "LITERAL" },
         "utterances": [
             "{cheese|CHEESE}",
-            "{I'd like|I would like|I would love|How about|add|put on|let's try|let's have} {cheese|CHEESE}"
+            "{cheese|CHEESE} please",
+            "{I'd like|I would like|I would love|How about|add|put on|let's try|let's have|can I have|may I have} {cheese|CHEESE}"
         ]
     },
     function(request, response) {
@@ -209,7 +215,7 @@ app.intent("AddTopping", {
         "slots": { "TOPPINGS": "LITERAL" },
         "utterances": [
             "{toppings|TOPPINGS}",
-            "{I'd like|I would like|I would love|How about|add|put on} {toppings|TOPPINGS}"
+            "{I'd like|I would like|I would love|How about|add|put on|can I have|may I have} {toppings|TOPPINGS}"
         ]
     },
     function(request, response) {
@@ -316,13 +322,25 @@ app.intent("FinishPizza", {
         ]
     },
     function(request, response) {
+        var session = request.getSession();
         var speech = getDescription(session);
-        response
-            .say(speech
-                .pause("250ms")
-                .say("I've ordered the pizza. If this had been a real app you would soon be tasting the heavenly bliss of your custom made pizza.")
-                .ssml())
-            .shouldEndSession(false);
+        if (isComplete(session)) {
+            response
+                .say(speech
+                    .pause("300ms")
+                    .say("If this had been a real app you would soon be tasting the heavenly bliss of your custom made pizza.")
+                    .pause("300ms")
+                    .say("Thank you for using pizza builder.")
+                    .ssml())
+                .shouldEndSession(true);
+        } else {
+            response
+                .say(speech
+                    .pause("300ms")
+                    .say("It looks like you're not done with your pizza yet. You can say cancel to stop, or you can add another topping.")
+                    .ssml())
+                .shouldEndSession(false);
+        }
     }
 );
 
@@ -333,6 +351,7 @@ app.intent("DescribePizza", {
         ]
     },
     function(request, response) {
+        var session = request.getSession();
         var speech = getDescription(session);
         response
             .say(speech.ssml())
@@ -340,9 +359,15 @@ app.intent("DescribePizza", {
     }
 );
 
-function getDescription(session) {
-    var session = request.getSession();
+function isComplete(session) {
+    var crust = session.get("crust");
+    var sauce = session.get("sauce");
+    var cheese = session.get("cheese");
+    var toppings = session.get("toppings");
+    return crust && sauce && cheese && toppings;
+}
 
+function getDescription(session) {
     var speech = new AmazonSpeech()
         .say("You currently have");
 
