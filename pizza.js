@@ -316,8 +316,7 @@ app.intent("AvailableOptions", {
 app.intent("FinishPizza", {
         "utterances": [
             "I'm {finished|done}",
-            "order {the pizza|it}",
-            "{no more|finish|done|complete|finished|purchase|buy|eat}",
+            "{order|purchase} {the pizza|it}",
             "{that's|that is} {enough|good|all}"
         ]
     },

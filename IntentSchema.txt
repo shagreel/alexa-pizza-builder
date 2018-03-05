@@ -1,0 +1,70 @@
+{
+   "intents": [
+      {
+         "intent": "AMAZON.HelpIntent"
+      },
+      {
+         "intent": "AMAZON.StopIntent"
+      },
+      {
+         "intent": "AMAZON.CancelIntent"
+      },
+      {
+         "intent": "MakePizza"
+      },
+      {
+         "intent": "SelectCrust",
+         "slots": [
+            {
+               "name": "CRUST",
+               "type": "LITERAL"
+            }
+         ]
+      },
+      {
+         "intent": "SelectSauce",
+         "slots": [
+            {
+               "name": "SAUCE",
+               "type": "LITERAL"
+            }
+         ]
+      },
+      {
+         "intent": "SelectCheese",
+         "slots": [
+            {
+               "name": "CHEESE",
+               "type": "LITERAL"
+            }
+         ]
+      },
+      {
+         "intent": "AddTopping",
+         "slots": [
+            {
+               "name": "TOPPINGS",
+               "type": "LITERAL"
+            }
+         ]
+      },
+      {
+         "intent": "RemoveTopping",
+         "slots": [
+            {
+               "name": "TOPPINGS",
+               "type": "LITERAL"
+            }
+         ]
+      },
+      {
+         "intent": "AvailableOptions"
+      },
+      {
+         "intent": "FinishPizza"
+      },
+      {
+         "intent": "DescribePizza"
+      }
+   ]
+} 
