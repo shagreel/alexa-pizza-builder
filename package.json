@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "pizza.js",
   "scripts": {
-    "start": "node pizza.js"
+    "start": "nodemon pizza.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
