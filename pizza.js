@@ -1,8 +1,10 @@
 'use strict';
 
 const express = require('express');
+const request = require('request');
 const alexa = require('alexa-app');
 const AmazonSpeech = require('ssml-builder/amazon_speech');
+const fileSystem = require('fs');
 
 // Constants
 const PORT = 8080;
@@ -448,7 +450,24 @@ console.log("******************  End of sample utterances    ******************\
 console.log("******************************************************************");
 console.log("* Copy and paste the sections above into the 'Interaction Model' *");
 console.log("* tab of the alexa developer console.                            *");
-console.log("******************************************************************");
+console.log("******************************************************************\n\n");
 
+request('http://localhost:4040/api/tunnels', { json: true }, (err, res, body) => {
+  if (err) {
+    console.log("******************************************************************");
+    console.log("*");
+    console.log("* [31mYou have no proxy running. Please start ngrok before starting[0m");
+    console.log("* [31mthis app.[0m");
+    console.log("*");
+    console.log("******************************************************************");
+  } else {
+    console.log("******************************************************************");
+    console.log("* Your service is available at:");
+    console.log("*");
+    console.log("*     [31m", body.tunnels[1].public_url+"/pizza[0m");
+    console.log("*");
+    console.log("******************************************************************");
+  }
+});
 // If you are using the new (beta) skill builder uncomment the line below
 //console.log(app.schemas.skillBuilder());
