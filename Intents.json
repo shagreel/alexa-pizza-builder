@@ -1,6 +1,6 @@
 {
     "languageModel": {
-        "invocationName": "pizza builder",
+        "invocationName": "summit pizza",
         "intents": [
       {
          "name": "AMAZON.HelpIntent",
