@@ -1,0 +1,316 @@
+{
+    "languageModel": {
+        "invocationName": "pizza builder",
+        "intents": [
+      {
+         "name": "AMAZON.HelpIntent",
+         "samples": []
+      },
+      {
+         "name": "AMAZON.StopIntent",
+         "samples": []
+      },
+      {
+         "name": "AMAZON.CancelIntent",
+         "samples": []
+      },
+      {
+         "name": "MakePizza",
+         "samples": [
+            "Make me a pizza",
+            "build me a pizza",
+            "create me a pizza",
+            "Make a pizza for me",
+            "build a pizza for me",
+            "create a pizza for me",
+            "I'd like a pizza",
+            "I would like a pizza",
+            "I need a pizza",
+            "pizza time",
+            "let's create a pizza",
+            "let's build a pizza",
+            "may I get a pizza",
+            "can I get a pizza",
+            "may I have a pizza",
+            "can I have a pizza",
+            "may I make a pizza",
+            "can I make a pizza",
+            "may I build a pizza",
+            "can I build a pizza"
+         ]
+      },
+      {
+         "name": "SelectCrust",
+         "samples": [
+            "{stuffed|CRUST}",
+            "{traditional|CRUST}",
+            "{thin|CRUST}",
+            "{thick|CRUST}",
+            "{deep dish|CRUST}",
+            "{focaccia|CRUST}",
+            "{herb|CRUST}",
+            "{stuffed|CRUST} traditional",
+            "{traditional|CRUST} thin",
+            "{thin|CRUST} thick",
+            "{thick|CRUST} deep dish",
+            "{deep dish|CRUST} focaccia",
+            "{focaccia|CRUST} herb",
+            "{herb|CRUST} stuffed",
+            "{stuffed|CRUST} please",
+            "{traditional|CRUST} crust please",
+            "I'd like {thin|CRUST} crust",
+            "I would like {thick|CRUST} crust",
+            "I would love {deep dish|CRUST} crust",
+            "How about {focaccia|CRUST} crust",
+            "let's have {herb|CRUST} crust",
+            "let's try {stuffed|CRUST} crust",
+            "can I have {traditional|CRUST} crust",
+            "may I have {thin|CRUST} crust",
+            "I'd like {thick|CRUST} crust please",
+            "I would like {deep dish|CRUST} crust please",
+            "I would love {focaccia|CRUST} crust please",
+            "How about {herb|CRUST} crust please",
+            "let's have {stuffed|CRUST} crust please",
+            "let's try {traditional|CRUST} crust please",
+            "can I have {thin|CRUST} crust please",
+            "may I have {thick|CRUST} crust please",
+            "I'd like a {deep dish|CRUST} crust",
+            "I would like a {focaccia|CRUST} crust",
+            "I would love a {herb|CRUST} crust",
+            "How about a {stuffed|CRUST} crust",
+            "let's have a {traditional|CRUST} crust",
+            "let's try a {thin|CRUST} crust",
+            "can I have a {thick|CRUST} crust",
+            "may I have a {deep dish|CRUST} crust",
+            "I'd like a {focaccia|CRUST} crust please",
+            "I would like a {herb|CRUST} crust please",
+            "I would love a {stuffed|CRUST} crust please",
+            "How about a {traditional|CRUST} crust please",
+            "let's have a {thin|CRUST} crust please",
+            "let's try a {thick|CRUST} crust please",
+            "can I have a {deep dish|CRUST} crust please",
+            "may I have a {focaccia|CRUST} crust please"
+         ],
+         "slots": [
+            {
+               "name": "CRUST",
+               "type": "LITERAL",
+               "samples": []
+            }
+         ]
+      },
+      {
+         "name": "SelectSauce",
+         "samples": [
+            "{Bechamel|SAUCE}",
+            "{Alfredo|SAUCE}",
+            "{Marinara|SAUCE}",
+            "{Pesto|SAUCE}",
+            "{Barbecue|SAUCE}",
+            "{Hummus|SAUCE}",
+            "I'd like {Bechamel|SAUCE}",
+            "I would like {Alfredo|SAUCE}",
+            "I would love {Marinara|SAUCE}",
+            "How about {Pesto|SAUCE}",
+            "let's have {Barbecue|SAUCE}",
+            "let's try {Hummus|SAUCE}",
+            "can I have {Bechamel|SAUCE}",
+            "may I have {Alfredo|SAUCE}",
+            "I'd like {Marinara|SAUCE} sauce",
+            "I would like {Pesto|SAUCE} sauce",
+            "I would love {Barbecue|SAUCE} sauce",
+            "How about {Hummus|SAUCE} sauce",
+            "let's have {Bechamel|SAUCE} sauce",
+            "let's try {Alfredo|SAUCE} sauce",
+            "can I have {Marinara|SAUCE} sauce",
+            "may I have {Pesto|SAUCE} sauce"
+         ],
+         "slots": [
+            {
+               "name": "SAUCE",
+               "type": "LITERAL",
+               "samples": []
+            }
+         ]
+      },
+      {
+         "name": "SelectCheese",
+         "samples": [
+            "{Colby|CHEESE}",
+            "{Provolone|CHEESE}",
+            "{Parmesan|CHEESE}",
+            "{Ricotta|CHEESE}",
+            "{Gruyere|CHEESE}",
+            "{Goat|CHEESE}",
+            "{Mozzarella|CHEESE}",
+            "{Cheddar|CHEESE}",
+            "{Colby|CHEESE} please",
+            "{Provolone|CHEESE} please",
+            "{Parmesan|CHEESE} please",
+            "{Ricotta|CHEESE} please",
+            "{Gruyere|CHEESE} please",
+            "{Goat|CHEESE} please",
+            "{Mozzarella|CHEESE} please",
+            "{Cheddar|CHEESE} please",
+            "I'd like {Colby|CHEESE}",
+            "I would like {Provolone|CHEESE}",
+            "I would love {Parmesan|CHEESE}",
+            "How about {Ricotta|CHEESE}",
+            "add {Gruyere|CHEESE}",
+            "put on {Goat|CHEESE}",
+            "let's try {Mozzarella|CHEESE}",
+            "let's have {Cheddar|CHEESE}",
+            "can I have {Colby|CHEESE}",
+            "may I have {Provolone|CHEESE}"
+         ],
+         "slots": [
+            {
+               "name": "CHEESE",
+               "type": "LITERAL",
+               "samples": []
+            }
+         ]
+      },
+      {
+         "name": "AddTopping",
+         "samples": [
+            "{Bell Pepper|TOPPINGS}",
+            "{Mushroom|TOPPINGS}",
+            "{Onion|TOPPINGS}",
+            "{Olive|TOPPINGS}",
+            "{Spinach|TOPPINGS}",
+            "{Artichoke|TOPPINGS}",
+            "{Tomato|TOPPINGS}",
+            "{Sun-dried Tomato|TOPPINGS}",
+            "{Pineapple|TOPPINGS}",
+            "{Basil|TOPPINGS}",
+            "{Pepperoni|TOPPINGS}",
+            "{Sausage|TOPPINGS}",
+            "{Bacon|TOPPINGS}",
+            "{Ham|TOPPINGS}",
+            "{Chicken|TOPPINGS}",
+            "{Pastrami|TOPPINGS}",
+            "I'd like {Bell Pepper|TOPPINGS}",
+            "I would like {Mushroom|TOPPINGS}",
+            "I would love {Onion|TOPPINGS}",
+            "How about {Olive|TOPPINGS}",
+            "add {Spinach|TOPPINGS}",
+            "put on {Artichoke|TOPPINGS}",
+            "can I have {Tomato|TOPPINGS}",
+            "may I have {Sun-dried Tomato|TOPPINGS}",
+            "I'd like {Pineapple|TOPPINGS}",
+            "I would like {Basil|TOPPINGS}",
+            "I would love {Pepperoni|TOPPINGS}",
+            "How about {Sausage|TOPPINGS}",
+            "add {Bacon|TOPPINGS}",
+            "put on {Ham|TOPPINGS}",
+            "can I have {Chicken|TOPPINGS}",
+            "may I have {Pastrami|TOPPINGS}"
+         ],
+         "slots": [
+            {
+               "name": "TOPPINGS",
+               "type": "LITERAL",
+               "samples": []
+            }
+         ]
+      },
+      {
+         "name": "RemoveTopping",
+         "samples": [
+            "{Bell Pepper|TOPPINGS}",
+            "{Mushroom|TOPPINGS}",
+            "{Onion|TOPPINGS}",
+            "{Olive|TOPPINGS}",
+            "{Spinach|TOPPINGS}",
+            "{Artichoke|TOPPINGS}",
+            "{Tomato|TOPPINGS}",
+            "{Sun-dried Tomato|TOPPINGS}",
+            "{Pineapple|TOPPINGS}",
+            "{Basil|TOPPINGS}",
+            "{Pepperoni|TOPPINGS}",
+            "{Sausage|TOPPINGS}",
+            "{Bacon|TOPPINGS}",
+            "{Ham|TOPPINGS}",
+            "{Chicken|TOPPINGS}",
+            "{Pastrami|TOPPINGS}",
+            "take off {Bell Pepper|TOPPINGS}",
+            "remove {Mushroom|TOPPINGS}",
+            "get rid of {Onion|TOPPINGS}",
+            "no {Olive|TOPPINGS}",
+            "take off {Spinach|TOPPINGS}",
+            "remove {Artichoke|TOPPINGS}",
+            "get rid of {Tomato|TOPPINGS}",
+            "no {Sun-dried Tomato|TOPPINGS}",
+            "take off {Pineapple|TOPPINGS}",
+            "remove {Basil|TOPPINGS}",
+            "get rid of {Pepperoni|TOPPINGS}",
+            "no {Sausage|TOPPINGS}",
+            "take off {Bacon|TOPPINGS}",
+            "remove {Ham|TOPPINGS}",
+            "get rid of {Chicken|TOPPINGS}",
+            "no {Pastrami|TOPPINGS}"
+         ],
+         "slots": [
+            {
+               "name": "TOPPINGS",
+               "type": "LITERAL",
+               "samples": []
+            }
+         ]
+      },
+      {
+         "name": "AvailableOptions",
+         "samples": [
+            "What are my options",
+            "What are my choices",
+            "What kinds are there",
+            "What types are there",
+            "What options are there",
+            "What choices are there",
+            "choices",
+            "options",
+            "types",
+            "kinds",
+            "what can I choose",
+            "what can I have",
+            "what can I get",
+            "what are there"
+         ]
+      },
+      {
+         "name": "FinishPizza",
+         "samples": [
+            "I'm finished",
+            "I'm done",
+            "order the pizza",
+            "purchase the pizza",
+            "order it",
+            "purchase it",
+            "that's enough",
+            "that is enough",
+            "that's good",
+            "that is good",
+            "that's all",
+            "that is all"
+         ]
+      },
+      {
+         "name": "DescribePizza",
+         "samples": [
+            "describe the pizza",
+            "tell me about the pizza",
+            "what's on the pizza",
+            "what is on the pizza",
+            "repeat back the pizza",
+            "describe my pizza",
+            "tell me about my pizza",
+            "what's on my pizza",
+            "what is on my pizza",
+            "repeat back my pizza"
+         ]
+      }
+        ],
+        "types": [ ]
+    }
+}

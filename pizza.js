@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const request = require('request');
 const alexa = require('alexa-app');
 const AmazonSpeech = require('ssml-builder/amazon_speech');
 const fileSystem = require('fs');
@@ -435,24 +434,26 @@ function getCurrentState(session) {
         return "toppings";
     }
 }
-
 api.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
 
 // If you are using old interaction modeling
-console.log("\n");
-console.log("******************   Start of intent schema     ******************\n");
-console.log(app.schemas.intent(), "\n");
-console.log("******************    End of intent schema      ******************\n\n");
-console.log("****************** Start of sample utterances   ******************\n");
-console.log(app.utterances(), "\n");
-console.log("******************  End of sample utterances    ******************\n\n");
-console.log("******************************************************************");
-console.log("* Copy and paste the sections above into the 'Interaction Model' *");
-console.log("* tab of the alexa developer console.                            *");
-console.log("******************************************************************\n\n");
+// console.log("\n");
+// console.log("******************   Start of intent schema     ******************\n");
+// console.log(app.schemas.intent(), "\n");
+// console.log("******************    End of intent schema      ******************\n\n");
+// console.log("****************** Start of sample utterances   ******************\n");
+// console.log(app.utterances(), "\n");
+// console.log("******************  End of sample utterances    ******************\n\n");
+// console.log("******************************************************************");
+// console.log("* Copy and paste the sections above into the 'Interaction Model' *");
+// console.log("* tab of the alexa developer console.                            *");
+// console.log("******************************************************************\n\n");
+// If you are using the new (beta) skill builder uncomment the line below
+//console.log(app.schemas.skillBuilder());
 
-request('http://localhost:4040/api/tunnels', { json: true }, (err, res, body) => {
+const curl = require('request');
+curl('http://localhost:4040/api/tunnels', { json: true }, (err, res, body) => {
   if (err) {
     console.log("******************************************************************");
     console.log("*");
@@ -461,13 +462,12 @@ request('http://localhost:4040/api/tunnels', { json: true }, (err, res, body) =>
     console.log("*");
     console.log("******************************************************************");
   } else {
+    var secure = (body.tunnels[0].proto == "https") ? 0 : 1;
     console.log("******************************************************************");
     console.log("* Your service is available at:");
     console.log("*");
-    console.log("*     [31m", body.tunnels[1].public_url+"/pizza[0m");
+    console.log("*     [31m", body.tunnels[secure].public_url+"/pizza[0m");
     console.log("*");
     console.log("******************************************************************");
   }
 });
-// If you are using the new (beta) skill builder uncomment the line below
-//console.log(app.schemas.skillBuilder());

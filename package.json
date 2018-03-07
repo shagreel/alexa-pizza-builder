@@ -9,9 +9,10 @@
     "start": "nodemon pizza.js"
   },
   "dependencies": {
+    "alexa-app": "^4.2.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.1",
-    "alexa-app": "^4.2.0",
-    "ssml-builder": "^0.4.2"
+    "ssml-builder": "^0.4.3",
+    "request": "^2.83.0"
   }
 }
