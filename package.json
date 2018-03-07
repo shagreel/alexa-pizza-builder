@@ -12,7 +12,8 @@
     "alexa-app": "^4.2.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.1",
-    "ssml-builder": "^0.4.3",
-    "request": "^2.83.0"
+    "npm": "^5.7.1",
+    "request": "^2.83.0",
+    "ssml-builder": "^0.4.3"
   }
 }

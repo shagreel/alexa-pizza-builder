@@ -464,7 +464,7 @@ curl('http://localhost:4040/api/tunnels', { json: true }, (err, res, body) => {
   } else {
     var secure = (body.tunnels[0].proto == "https") ? 0 : 1;
     console.log("******************************************************************");
-    console.log("* Your service is available at:");
+    console.log("* Your app endpoint is:");
     console.log("*");
     console.log("*     [31m", body.tunnels[secure].public_url+"/pizza[0m");
     console.log("*");
