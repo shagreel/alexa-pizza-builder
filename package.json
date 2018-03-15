@@ -11,6 +11,7 @@
   "dependencies": {
     "alexa-app": "^4.2.1",
     "body-parser": "^1.18.2",
+    "crypto": "^1.0.1",
     "express": "^4.16.1",
     "npm": "^5.7.1",
     "request": "^2.83.0",

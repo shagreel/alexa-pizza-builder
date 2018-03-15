@@ -2,8 +2,12 @@
 
 const express = require('express');
 const alexa = require('alexa-app');
+const Analytics = require('./analytics');
 const AmazonSpeech = require('ssml-builder/amazon_speech');
 const fileSystem = require('fs');
+const crypto = require('crypto');
+const curl = require('request');
+curl.debug = true;
 
 // Constants
 const PORT = 8080;
@@ -20,22 +24,43 @@ app.express({
 });
 
 app.pre = function(request, response, type) {
-    if (request.type() == "IntentRequest") {
-        console.log("*********** Request ***********");
-        console.log(request.data.request.intent.name);
-        console.log("  -- ", request.data.request.intent.slots);
+  console.log(request.data.session);
+  request.analytics = new Analytics();
+  request.analytics.contextData("a.AppID", "SummitPizza1.0")
+  request.analytics.contextData("RequestType", request.type());
+  if (request.data.session.new) {
+    request.analytics.contextData("a.LaunchEvent", 1);
+  }
+  request.analytics.visitorId(crypto.createHash('sha1').update(request.userId).digest('hex'));
+  if (request.type() == "IntentRequest") {
+    request.analytics.contextData("Intent", request.data.request.intent.name);
+    request.analytics.pageName(request.data.request.intent.name);
+    if (request.data.request.intent.slots && Object.keys(request.data.request.intent.slots).length > 0) {
+      var slotName;
+      for (slotName in request.data.request.intent.slots) {
+        request.analytics.contextData("Slot", request.data.request.intent.slots[slotName].value);
+      }
     }
+    console.log("*********** Request ***********");
+    console.log(request.data.request.intent.name);
+    console.log("  -- ", request.data.request.intent.slots);
+  } else {
+    request.analytics.contextData("Intent", request.type());
+    request.analytics.pageName(request.type());
+  }
 };
 
 app.post = function(request, response, type) {
-    console.log("*********** Session ***********");
-    if (request.getSession()) {
-        console.log("Crust - %s", request.getSession().get("crust"));
-        console.log("Sauce - %s", request.getSession().get("sauce"));
-        console.log("Cheese - %s", request.getSession().get("cheese"));
-        console.log("Toppings - %s", request.getSession().get("toppings"));
-        console.log("\n");
-    }
+  console.log("*********** Session ***********");
+  var session = request.getSession();
+  if (session) {
+    console.log("Crust - %s", session.get("crust"));
+    console.log("Sauce - %s", session.get("sauce"));
+    console.log("Cheese - %s", session.get("cheese"));
+    console.log("Toppings - %s", session.get("toppings"));
+    console.log("\n");
+  }
+  request.analytics.send(curl, "oocha");
 };
 
 app.launch(function(request, response) {
@@ -69,6 +94,7 @@ app.intent("AMAZON.StopIntent", {
     }, function(request, response) {
         var stopOutput = "No pizza tonight? Ok.";
         response.say(stopOutput);
+        request.analytics.event(21);
     }
 );
 
@@ -78,6 +104,7 @@ app.intent("AMAZON.CancelIntent", {
     }, function(request, response) {
         var cancelOutput = "Ok. Since you don't want it, I'll give it to some folks who are down on their luck.";
         response.say(cancelOutput);
+        request.analytics.event(21);
     }
 );
 
@@ -133,6 +160,7 @@ app.intent("SelectCrust", {
                 speech.say("Ok. I have changed your crust from " + old + " to " + crust + ".");
             } else {
                 speech.say("Ok. I have created a beautiful " + crust + " crust for you.");
+                request.analytics.event(9);
             }
             response
                 .say(speech
@@ -171,6 +199,7 @@ app.intent("SelectSauce", {
             } else {
                 speech.say("I have slathered your crust with savory " + session.get("sauce") + " sauce.");
             }
+            request.analytics.event(10);
         }
         response
             .say(speech
@@ -201,6 +230,7 @@ app.intent("SelectCheese", {
             speech.say("Ok. I have added " + session.get("cheese") + ".");
         } else {
             speech.say("I have piled some wonderful " + session.get("cheese") + " on your pizza.");
+            request.analytics.event(11);
         }
         response
             .say(speech
@@ -222,9 +252,11 @@ app.intent("AddTopping", {
     function(request, response) {
         var session = request.getSession();
         var toppings = session.get("toppings") || [];
+        if (toppings.length == 0) {
+          request.analytics.event(12);
+        }
         var topping = request.slot("TOPPINGS");
         toppings.push(topping);
-        console.log(toppings);
 
         session.set("toppings", toppings);
 
@@ -325,12 +357,14 @@ app.intent("FinishPizza", {
         var session = request.getSession();
         var speech = getDescription(session);
         if (isComplete(session)) {
+            request.analytics.event(13);
+          
             response
                 .say(speech
                     .pause("300ms")
                     .say("If this had been a real app you would soon be tasting the heavenly bliss of your custom made pizza.")
                     .pause("300ms")
-                    .say("Thank you for using pizza builder.")
+                    .say("Thank you for using summit pizza.")
                     .ssml())
                 .shouldEndSession(true);
         } else {
@@ -452,7 +486,6 @@ console.log(`Running on http://${HOST}:${PORT}`);
 // If you are using the new (beta) skill builder uncomment the line below
 //console.log(app.schemas.skillBuilder());
 
-const curl = require('request');
 curl('http://localhost:4040/api/tunnels', { json: true }, (err, res, body) => {
   if (err) {
     console.log("******************************************************************");
