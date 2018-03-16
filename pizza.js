@@ -23,6 +23,25 @@ app.express({
 });
 
 app.track = function(request, response, type) {
+  request.analytics.contextData("a.AppID", "SummitPizza1.0")
+  request.analytics.contextData("RequestType", request.type());
+  if (request.data.session.new) {
+    request.analytics.contextData("a.LaunchEvent", 1);
+  }
+  request.analytics.visitorId(crypto.createHash('sha1').update(request.userId).digest('hex'));
+  if (request.type() == "IntentRequest") {
+    request.analytics.contextData("Intent", request.data.request.intent.name);
+    request.analytics.pageName(request.data.request.intent.name);
+    if (request.data.request.intent.slots && Object.keys(request.data.request.intent.slots).length > 0) {
+      var slotName;
+      for (slotName in request.data.request.intent.slots) {
+        request.analytics.contextData("Slot", request.data.request.intent.slots[slotName].value);
+      }
+    }
+  } else {
+    request.analytics.contextData("Intent", request.type());
+    request.analytics.pageName(request.type());
+  }
 }
 
 app.pre = function(request, response, type) {
