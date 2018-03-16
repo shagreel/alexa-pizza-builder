@@ -7,7 +7,6 @@ const AmazonSpeech = require('ssml-builder/amazon_speech');
 const fileSystem = require('fs');
 const crypto = require('crypto');
 const curl = require('request');
-curl.debug = true;
 
 // Constants
 const PORT = 8080;
@@ -23,31 +22,15 @@ app.express({
     debug: true
 });
 
+app.track = function(request, response, type) {
+}
+
 app.pre = function(request, response, type) {
-  console.log(request.data.session);
-  request.analytics = new Analytics();
-  request.analytics.contextData("a.AppID", "SummitPizza1.0")
-  request.analytics.contextData("RequestType", request.type());
-  if (request.data.session.new) {
-    request.analytics.contextData("a.LaunchEvent", 1);
-  }
-  request.analytics.visitorId(crypto.createHash('sha1').update(request.userId).digest('hex'));
-  if (request.type() == "IntentRequest") {
-    request.analytics.contextData("Intent", request.data.request.intent.name);
-    request.analytics.pageName(request.data.request.intent.name);
-    if (request.data.request.intent.slots && Object.keys(request.data.request.intent.slots).length > 0) {
-      var slotName;
-      for (slotName in request.data.request.intent.slots) {
-        request.analytics.contextData("Slot", request.data.request.intent.slots[slotName].value);
-      }
-    }
+    request.analytics = new Analytics();
+    app.track(request, response, type);
     console.log("*********** Request ***********");
     console.log(request.data.request.intent.name);
     console.log("  -- ", request.data.request.intent.slots);
-  } else {
-    request.analytics.contextData("Intent", request.type());
-    request.analytics.pageName(request.type());
-  }
 };
 
 app.post = function(request, response, type) {
@@ -350,7 +333,8 @@ app.intent("FinishPizza", {
         "utterances": [
             "I'm {finished|done}",
             "{order|purchase} {the pizza|it}",
-            "{that's|that is} {enough|good|all}"
+            "{that's|that is} {enough|good|all}",
+            "no more"
         ]
     },
     function(request, response) {
