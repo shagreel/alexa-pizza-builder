@@ -28,9 +28,11 @@ app.track = function(request, response, type) {
 app.pre = function(request, response, type) {
     request.analytics = new Analytics();
     app.track(request, response, type);
-    console.log("*********** Request ***********");
-    console.log(request.data.request.intent.name);
-    console.log("  -- ", request.data.request.intent.slots);
+    if (request.type() == "IntentRequest") {
+        console.log("*********** Request ***********");
+        console.log(request.data.request.intent.name);
+        console.log("  -- ", request.data.request.intent.slots);
+    }
 };
 
 app.post = function(request, response, type) {
